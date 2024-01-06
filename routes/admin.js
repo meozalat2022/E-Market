@@ -8,7 +8,7 @@ const adminController = require("../controllers/admin");
 
 const router = express.Router();
 // /admin/add-product => GET
-router.get("/add-product", adminController.getProduct);
+router.get("/add-product", adminController.getAddProduct);
 // /admin/add-product => POST
 router.post("/add-product", adminController.postProduct);
 router.get("/edit-product/:productId", adminController.getEditProduct);
@@ -17,6 +17,7 @@ router.get("/edit-product/:productId", adminController.getEditProduct);
 //admin/products
 
 router.get("/products", adminController.getProducts);
+router.post("/edit-product", adminController.postEditProduct);
 
 // exports.routes = router;
 // exports.products = products;
