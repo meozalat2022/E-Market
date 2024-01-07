@@ -8,14 +8,31 @@ exports.getAddProduct = (req, res, next) => {
   });
 };
 
+// exports.postProduct = (req, res, next) => {
+//   const title = req.body.title;
+//   const imageUrl = req.body.imageUrl;
+//   const price = req.body.price;
+//   const description = req.body.description;
+//   const prod = new Product(null, title, imageUrl, +price, description);
+//   prod.save();
+//   res.redirect("/");
+// };
+
 exports.postProduct = (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const prod = new Product(null, title, imageUrl, +price, description);
-  prod.save();
-  res.redirect("/");
+
+  const prod = new Product(null, title, imageUrl, price, description);
+  prod
+    .save()
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.getEditProduct = (req, res, next) => {
