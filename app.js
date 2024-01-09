@@ -10,6 +10,8 @@ const User = require("./models/user");
 const Product = require("./models/product");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cart-item");
+const Order = require("./models/order");
+const OrderItem = require("./models/order-item");
 const sequelize = require("./util/database");
 // app.engine(
 //   "hbs",
@@ -67,6 +69,18 @@ Cart.belongsTo(User);
 
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+
+Order.belongsTo(User);
+
+// optional the reverse relation
+
+User.hasMany(Order);
+
+Order.belongsToMany(Product, { through: OrderItem });
+
+//optional the revers relation
+
+Product.belongsToMany(Order, { through: OrderItem });
 
 sequelize
   // .sync({ force: true })
