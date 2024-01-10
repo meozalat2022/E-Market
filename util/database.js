@@ -9,11 +9,27 @@
 
 // module.exports = pool.promise();
 
-const Sequelize = require("sequelize");
+// const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize("node-complete-db", "root", "0123162554", {
-  dialect: "mysql",
-  host: "localhost",
-});
+// const sequelize = new Sequelize("node-complete-db", "root", "0123162554", {
+//   dialect: "mysql",
+//   host: "localhost",
+// });
 
-module.exports = sequelize;
+// module.exports = sequelize;
+
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
+
+const mongoConnect = (callback) => {
+  MongoClient.connect(
+    "mongodb+srv://zalatdodo:0123162554@cluster0.0fyw2ou.mongodb.net/?retryWrites=true&w=majority"
+  )
+    .then((client) => {
+      console.log("connected");
+      callback(client);
+    })
+    .catch((err) => console.log(err));
+};
+
+module.exports = mongoConnect;
