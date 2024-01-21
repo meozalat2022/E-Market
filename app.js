@@ -15,18 +15,19 @@ app.set("views", "views");
 
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+// const user = require("./models/user");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use((req, res, next) => {
-//   User.findById("65a2fc452049a31d9fa53ace")
-//     .then((user) => {
-//       req.user = new User(user.name, user.email, user.cart, user._id);
-//       next();
-//     })
-//     .catch((err) => console.log(err));
-// });
+app.use((req, res, next) => {
+  User.findById("65aa64f74e40f25e974333ae")
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -38,6 +39,18 @@ mongoose
     "mongodb+srv://zalatdodo:0123162554@cluster0.0fyw2ou.mongodb.net/shop?retryWrites=true&w=majority"
   )
   .then((result) => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          name: "Mohammed",
+          email: "test@test.com",
+          cart: {
+            items: [],
+          },
+        });
+        user.save();
+      }
+    });
     app.listen(3000);
   })
   .catch((err) => console.log(err));
