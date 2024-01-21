@@ -3,7 +3,7 @@ const Product = require("../models/product");
 exports.getProducts = (req, res, next) => {
   // Product.fetchAll()
   Product.find()
-    .select("title")
+    // .select("title")
     .populate("userId")
     .then((products) => {
       console.log(products);
@@ -49,12 +49,14 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   req.user
-    .getCart()
-    .then((products) => {
+    // .getCart()
+    .populate("cart.items.productId")
+    .then((user) => {
+      console.log(user.cart.items);
       res.render("shop/cart", {
         path: "/cart",
         pageTitle: "Your Cart",
-        products: products,
+        products: user.cart.items,
       });
     })
     .catch((err) => console.log(err));
