@@ -47,6 +47,7 @@ exports.getSignup = (req, res, next) => {
       password: password,
       confirmPassword: req.body.confirmPassword,
     },
+    isValidationErrors: [],
   });
 };
 
@@ -91,6 +92,7 @@ exports.postSignup = (req, res, next) => {
         password: password,
         confirmPassword: req.body.confirmPassword,
       },
+      isValidationErrors: errors.array(),
     });
   }
 
