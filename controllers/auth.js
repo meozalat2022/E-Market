@@ -4,6 +4,8 @@ const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 const crypto = require("crypto");
 const user = require("../models/user");
+const { validationResult } = require("express-validator");
+
 const transporter = nodemailer.createTransport(
   sendgridTransport({
     auth: {
@@ -71,39 +73,36 @@ exports.postLogin = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
+  // const confirmPassword = req.body.confirmPassword;
 
-  User.findOne({ email: email })
-    .then((userDoc) => {
-      if (userDoc) {
-        req.flash("error", "Email Already exists try a different one instead");
-        return res.redirect("/signup");
-      }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("auth/signup", {
+      path: "/signup",
+      pageTitle: "Signup",
+      errorMessage: errors.array()[0].msg,
+    });
+  }
 
-      return bcrypt
-        .hash(password, 12)
-        .then((hashedPassword) => {
-          const user = new User({
-            email: email,
-            password: hashedPassword,
-            cart: { items: [] },
-          });
-          return user.save();
-        })
-        .then((result) => {
-          res.redirect("/login");
-          return transporter.sendMail({
-            to: email,
-            from: "shop@node-complete.com",
-            subject: "Signup succeeded!",
-            html: "<h1>You successfully signed up!</h1>",
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  bcrypt
+    .hash(password, 12)
+    .then((hashedPassword) => {
+      const user = new User({
+        email: email,
+        password: hashedPassword,
+        cart: { items: [] },
+      });
+      return user.save();
     })
-
+    .then((result) => {
+      res.redirect("/login");
+      return transporter.sendMail({
+        to: email,
+        from: "shop@node-complete.com",
+        subject: "Signup succeeded!",
+        html: "<h1>You successfully signed up!</h1>",
+      });
+    })
     .catch((err) => console.log(err));
 };
 
