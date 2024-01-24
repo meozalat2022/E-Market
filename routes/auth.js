@@ -26,19 +26,24 @@ router.post(
             }
           })
           .catch((err) => console.log(err));
-      }),
+      })
+      .normalizeEmail()
+      .trim(),
     body(
       "password",
       "Please enter password with only number and text at least 5 characters"
     )
       .isLength({ min: 5 })
-      .isAlphanumeric(),
-    body("confirmPassword").custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Password have to match");
-      }
-      return true;
-    }),
+      .isAlphanumeric()
+      .trim(),
+    body("confirmPassword")
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error("Password have to match");
+        }
+        return true;
+      })
+      .trim(),
   ],
   authController.postSignup
 );
