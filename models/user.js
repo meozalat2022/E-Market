@@ -1,14 +1,13 @@
-const { Timestamp } = require("mongodb");
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  password: {
+  email: {
     type: String,
     required: true,
   },
-  email: {
+  password: {
     type: String,
     required: true,
   },
@@ -19,10 +18,9 @@ const userSchema = new Schema({
       {
         productId: {
           type: Schema.Types.ObjectId,
-          required: true,
           ref: "Product",
+          required: true,
         },
-
         quantity: { type: Number, required: true },
       },
     ],
@@ -52,20 +50,19 @@ userSchema.methods.addToCart = function (product) {
   return this.save();
 };
 
-userSchema.methods.deleteItemFromCart = function (productId) {
+userSchema.methods.removeFromCart = function (productId) {
   const updatedCartItems = this.cart.items.filter((item) => {
     return item.productId.toString() !== productId.toString();
   });
-
   this.cart.items = updatedCartItems;
   return this.save();
 };
 
 userSchema.methods.clearCart = function () {
   this.cart = { items: [] };
-
   return this.save();
 };
+
 module.exports = mongoose.model("User", userSchema);
 
 // const mongodb = require('mongodb');

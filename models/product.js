@@ -11,21 +11,23 @@ const productSchema = new Schema({
     type: Number,
     required: true,
   },
-  imageUrl: {
+  description: {
     type: String,
     required: true,
   },
-  description: {
+  imageUrl: {
     type: String,
     required: true,
   },
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
 });
 
 module.exports = mongoose.model("Product", productSchema);
+
 // const mongodb = require('mongodb');
 // const getDb = require('../util/database').getDb;
 
