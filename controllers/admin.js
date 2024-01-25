@@ -32,7 +32,25 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect("/admin/products");
     })
     .catch((err) => {
-      console.log(err);
+      // res.redirect("/500");
+      // return res.status(500).render("admin/edit-product", {
+      //   pageTitle: "Add Product",
+      //   path: "/admin/add-product",
+      //   editing: false,
+      //   hasError: true,
+      //   product: {
+      //     title: title,
+      //     price: price,
+      //     imageUrl: imageUrl,
+      //     description: description,
+      //   },
+      //   errorMessage: "Database is not available try again later",
+      //   isValidationErrors: [],
+      // });
+
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
